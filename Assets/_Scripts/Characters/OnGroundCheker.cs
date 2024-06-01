@@ -31,6 +31,7 @@ public class OnGroundCheker : MonoBehaviour
             _onTheGround = true;
         else
             _onTheGround = false;
+        //Debug.Log(_onTheGround);
 
         if (!_onTheGround)
         {
@@ -38,7 +39,7 @@ public class OnGroundCheker : MonoBehaviour
         }
         else
         {
-            if (_maxHeight - transform.position.y > 0.01f)
+            if (_maxHeight - transform.position.y > 0.5f)
                 OnFallEnd?.Invoke(_maxHeight - transform.position.y);
             _maxHeight = transform.position.y;
         }
