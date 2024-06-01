@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public abstract class DamagebleObject : MonoBehaviour
+public abstract class DamagebleObject : NetworkBehaviour
 {
     [SerializeField] private int _maxHp = 100;
     [SerializeField] private int _currentHp = 100; public int CurrentHp { get { return _currentHp; } }
@@ -29,6 +30,7 @@ public abstract class DamagebleObject : MonoBehaviour
             _currentHp += hitPoints;
             if (_currentHp > _maxHp)
                 _currentHp = _maxHp;
+            Debug.Log("Player " + OwnerClientId + " healed");
         }
     }
 

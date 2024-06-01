@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject.Asteroids;
 
 [RequireComponent(typeof(HumanPlayerInput))]
 [RequireComponent(typeof(HumanAnimator))]
@@ -21,11 +22,28 @@ public class HumanPlayerController : DamagebleObject
     private OnGroundCheker _onGroundCheker;
     private float _lastVerInput; //Необходимо для определения направления во время движения в воздухе
 
+
+    //*********************** УДАЛИТЬ!
+    [SerializeField] private Transform _cameraTarget;
+    [SerializeField] private FollowCamera _cameraPrefab;
+
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _humanAnimator = GetComponent<HumanAnimator>();
         _onGroundCheker = GetComponent<OnGroundCheker>();
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            //FollowCamera cam = Instantiate(_cameraPrefab, transform.position, Quaternion.identity);
+            FollowCamera cam = Camera.main.GetComponent<FollowCamera>();
+            cam.transform.position = transform.position;
+            cam.SetTarget(_cameraTarget);
+        }
     }
 
     private void OnEnable()
@@ -80,6 +98,6 @@ public class HumanPlayerController : DamagebleObject
 
     protected override void Death()
     {
-        
+
     }
 }
