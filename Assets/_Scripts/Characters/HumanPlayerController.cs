@@ -73,6 +73,8 @@ public class HumanPlayerController : DamagebleObject
             _humanAnimator.Move(verInput);
             _lastVerInput = verInput;
         }
+
+        _humanAnimator.SetAnimationJump(_onGroundCheker.OnTheGround);
     }
 
     public void Jump()
@@ -80,7 +82,7 @@ public class HumanPlayerController : DamagebleObject
         if (_onGroundCheker.OnTheGround && _lastVerInput >= 0)
         {
             _rigidbody.AddForce(Vector3.up * 10000 * _jumpForce);
-            _humanAnimator.Jump();
+            //_humanAnimator.Jump();
         }
     }
 

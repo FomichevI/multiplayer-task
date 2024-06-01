@@ -37,12 +37,17 @@ public class HumanAnimator : MonoBehaviour
     public void Move(float verInput)
     {
         _animator.SetFloat("Speed", verInput);
-        _animator.SetBool("OnTheGround", true);
     }
-    public void Jump()
+    //public void Jump()
+    //{
+    //    _animator.SetBool("Jump", true);
+    //    _animator.SetBool("OnTheGround", false);
+    //}
+
+    public void SetAnimationJump(bool ontheGround)
     {
-        _animator.SetTrigger("Jump");
-        _animator.SetBool("OnTheGround", false);
+        _animator.SetBool("Jump", !ontheGround);
+        _animator.SetBool("OnTheGround", ontheGround);
     }
 
     private void OnAnimatorIK() //Привязываем левую руку персонажа, чтобы она  сметрела вперед
