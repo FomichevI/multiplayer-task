@@ -8,6 +8,7 @@ using Zenject.Asteroids;
 public class HumanPlayerController : DamagebleObject
 {
     #region MovingProperties
+    [Header("Moving")]
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _jumpForce = 1.5f;
@@ -16,7 +17,7 @@ public class HumanPlayerController : DamagebleObject
     [SerializeField] private float _jumpMoveMultiplier = 0.3f;
     #endregion
 
-    [SerializeField] private float _minFallHeightToGetDamage = 2f;
+    [SerializeField] private FloatingHud _playerHud;
     private Rigidbody _rigidbody;
     private HumanAnimator _humanAnimator;
     private OnGroundCheker _onGroundCheker;
@@ -25,7 +26,6 @@ public class HumanPlayerController : DamagebleObject
 
     //*********************** УДАЛИТЬ!
     [SerializeField] private Transform _cameraTarget;
-    [SerializeField] private FollowCamera _cameraPrefab;
 
 
     private void Awake()
@@ -39,21 +39,27 @@ public class HumanPlayerController : DamagebleObject
     {
         if (IsOwner)
         {
-            //FollowCamera cam = Instantiate(_cameraPrefab, transform.position, Quaternion.identity);
             FollowCamera cam = Camera.main.GetComponent<FollowCamera>();
             cam.transform.position = transform.position;
             cam.SetTarget(_cameraTarget);
+
         }
+
+        _playerHud.UpdateName("Player " + OwnerClientId);
+        // Перед этим получаем значения из БД и потом устанавливаем их на HUD и в самом классе
+        _playerHud.UpdateHpBar(100, 100);
     }
 
     private void OnEnable()
     {
         _onGroundCheker.OnFallEnd.AddListener(GetFallDamage);
+        OnHpChangedEvent.AddListener(_playerHud.UpdateHpBar);
     }
 
     private void OnDisable()
     {
         _onGroundCheker.OnFallEnd.RemoveListener(GetFallDamage);
+        OnHpChangedEvent.RemoveListener(_playerHud.UpdateHpBar);
     }
 
     public void Move(float horInput, float verInput)
@@ -84,13 +90,6 @@ public class HumanPlayerController : DamagebleObject
             _rigidbody.AddForce(Vector3.up * 10000 * _jumpForce);
             //_humanAnimator.Jump();
         }
-    }
-
-    private void GetFallDamage(float fallHeight)
-    {
-        Debug.Log(fallHeight);
-        if (fallHeight > _minFallHeightToGetDamage)
-            GetDamage(10);
     }
 
     public void Fire()

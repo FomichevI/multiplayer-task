@@ -9,7 +9,6 @@ public class MedicineChest : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.tag);
         if (other.gameObject.tag == "Player")
         {
             other.gameObject.GetComponent<DamagebleObject>().Heal(_healingHp);
