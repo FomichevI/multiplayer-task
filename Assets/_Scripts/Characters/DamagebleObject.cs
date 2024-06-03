@@ -60,9 +60,10 @@ public abstract class DamagebleObject : NetworkBehaviour
         if (!IsOwner) return;
         if (_isAlive)
         {
-            _currentHp.Value += hitPoints;
-            if (_currentHp.Value > _maxHp.Value)
-                _currentHp = _maxHp;
+            if (_currentHp.Value + hitPoints > _maxHp.Value)
+                _currentHp.Value = _maxHp.Value;
+            else
+                _currentHp.Value += hitPoints;
         }
     }
 

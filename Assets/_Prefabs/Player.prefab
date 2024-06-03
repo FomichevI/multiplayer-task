@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2397801799
+  GlobalObjectIdHash: 3605374336
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -198,15 +198,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5bb55c400afef4f84d0423b2d2b9b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 100
-  _currentHp: 100
-  _minFallHeightToGetDamage: 2
+  _maxHp:
+    m_InternalValue: 100
+  _currentHp:
+    m_InternalValue: 100
+  _minFallHeightToGetDamage: 3
   _fallDamageMultyplier: 2
   _moveSpeed: 10
-  _rotationSpeed: 65
+  _rotationSpeed: 100
   _jumpForce: 1.5
-  _fireAngle: -2
-  _fireColldown: 1
   _jumpMoveMultiplier: 0.7
   _playerHud: {fileID: 1174713989702785211}
   _cameraTarget: {fileID: 665489009544465018}
