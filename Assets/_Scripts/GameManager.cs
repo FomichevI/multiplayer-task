@@ -6,6 +6,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    public GlobalPlayersData PlayerData;
     [SerializeField] private SceneLoader _sceneLoader; public SceneLoader SceneLoader { get { return _sceneLoader; } }
     [SerializeField] private GameConfig _gameConfig;
 

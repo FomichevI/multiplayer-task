@@ -44,11 +44,20 @@ public class HumanPlayerController : DamagebleObject
             FollowCamera cam = Camera.main.GetComponent<FollowCamera>();
             cam.transform.position = transform.position;
             cam.SetTarget(_cameraTarget);
-
         }
+        InitPlayerHud();
+    }
 
-        _playerHud.UpdateName("Player " + OwnerClientId);
-        // Перед этим получаем значения из БД и потом устанавливаем их на HUD и в самом классе
+    private void InitPlayerHud()
+    {
+        //string name = GameManager.Instance.PlayerData.PlayerName;
+        //if (name != null && name != "")
+        //    _playerHud.UpdateNameClientRpc(name);
+        //else
+            _playerHud.UpdateNameClientRpc("Player " + OwnerClientId);
+
+
+        // Здесь необходимо получить значения из БД и потом устанавливаем их на HUD и в самом классе
         _playerHud.UpdateHpBar(100, 100);
     }
 

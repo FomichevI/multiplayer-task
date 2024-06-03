@@ -12,14 +12,21 @@ public class FloatingHud : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI _hpTmp;
     [SerializeField] private Image _hpBarFilling;
 
+    [SerializeField] private NetworkVariable<FixedString32Bytes> _name = 
+        new NetworkVariable<FixedString32Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
 
     private void LateUpdate()
     {
         transform.LookAt(transform.position + Camera.main.transform.forward);
     }
 
-    public void UpdateName(string name)
+    [ClientRpc]
+    public void UpdateNameClientRpc(string name)
     {
+        //_name.Value = name;
+        //_nameTmp.text = _name.Value.ToString();
+
         _nameTmp.text = name;
     }
 
