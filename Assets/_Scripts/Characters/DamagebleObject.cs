@@ -9,38 +9,47 @@ public abstract class DamagebleObject : NetworkBehaviour
     [HideInInspector] protected UnityEvent<int,int> OnHpChangedEvent = new UnityEvent<int, int>();
 
     [Header("Hit points")]
-    [SerializeField] private int _maxHp = 100;
-    [SerializeField] private int _currentHp = 100; public int CurrentHp { get { return _currentHp; } }
+    [SerializeField] private NetworkVariable<int> _maxHp = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    [SerializeField] private NetworkVariable<int> _currentHp = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public int CurrentHp { get { return _currentHp.Value; } }
     [SerializeField] private float _minFallHeightToGetDamage = 2f;
     [SerializeField] private float _fallDamageMultyplier = 1.5f; // мультипликатор урона от падения увеличивает урон от падения за каждую единицу высоты 
     // сверх минимальной высоты, при падении с которой объект получает урон
 
     private bool _isAlive = true;
 
+    public override void OnNetworkSpawn()
+    {
+        _currentHp.OnValueChanged += (int prevValue, int newValue) => { OnHpChangedEvent?.Invoke(_currentHp.Value, _maxHp.Value); };
+        _maxHp.OnValueChanged += (int prevValue, int newValue) => { OnHpChangedEvent?.Invoke(_currentHp.Value, _maxHp.Value); };
+    }
+
     public void GetDamage(int damage)
     {
+        if (!IsOwner) return;
         if (_isAlive)
         {
-            _currentHp -= damage;
-            if (_currentHp <= 0)
+            _currentHp.Value -= damage;
+            if (_currentHp.Value <= 0)
             {
-                _currentHp = 0;
+                _currentHp.Value = 0;
                 _isAlive = false;
                 Death();
             }
-            OnHpChangedEvent?.Invoke(_currentHp, _maxHp);
         }
     }
 
     protected void GetFallDamage(float fallHeight)
     {
+        if (!IsOwner) return;
         if (fallHeight > _minFallHeightToGetDamage)
             GetDamage(CalculateFallDamage(fallHeight));
     }
 
     private int CalculateFallDamage(float fallHeight)
     {
-        int defaulDamage = _maxHp / 20;
+        int defaulDamage = _maxHp.Value / 20;
         int damage = (int)(defaulDamage * (1 + (fallHeight - _minFallHeightToGetDamage) * _fallDamageMultyplier));
         Debug.Log("Высота: " + fallHeight + "\nУрон: " + damage);
         return damage;
@@ -48,12 +57,12 @@ public abstract class DamagebleObject : NetworkBehaviour
 
     public void Heal(int hitPoints)
     {
+        if (!IsOwner) return;
         if (_isAlive)
         {
-            _currentHp += hitPoints;
-            if (_currentHp > _maxHp)
+            _currentHp.Value += hitPoints;
+            if (_currentHp.Value > _maxHp.Value)
                 _currentHp = _maxHp;
-            OnHpChangedEvent?.Invoke(_currentHp, _maxHp);
         }
     }
 

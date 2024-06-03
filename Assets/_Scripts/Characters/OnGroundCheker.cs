@@ -18,11 +18,11 @@ public class OnGroundCheker : MonoBehaviour
     private bool _onTheGround = true; public bool OnTheGround { get { return _onTheGround; } }
     private Ray _ray;
     private RaycastHit _hit;
-    private NetworkVariable<float> _maxHeight = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private float _maxHeight;
 
     private void Start()
     {
-        _maxHeight.Value = transform.position.y;
+        _maxHeight = transform.position.y;
     }
 
     private void FixedUpdate()
@@ -40,15 +40,15 @@ public class OnGroundCheker : MonoBehaviour
         }
         else
         {
-            if (_maxHeight.Value - transform.position.y > 0.5f)
-                OnFallEnd?.Invoke(_maxHeight.Value - transform.position.y);
-            _maxHeight.Value = transform.position.y;
+            if (_maxHeight - transform.position.y > 0.5f)
+                OnFallEnd?.Invoke(_maxHeight - transform.position.y);
+            _maxHeight = transform.position.y;
         }
     }
 
     private void CalculateMaxHeithFall()
     {
-        if (transform.position.y > _maxHeight.Value)
-            _maxHeight.Value = transform.position.y;
+        if (transform.position.y > _maxHeight)
+            _maxHeight = transform.position.y;
     }
 }

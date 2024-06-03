@@ -12,8 +12,8 @@ public class HumanPlayerController : DamagebleObject
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _jumpForce = 1.5f;
-    [SerializeField] private float _fireAngle = -5;
-    [SerializeField] private float _fireColldown = 1;
+    //[SerializeField] private float _fireAngle = -5;
+    //[SerializeField] private float _fireColldown = 1;
     [SerializeField] private float _jumpMoveMultiplier = 0.3f;
     #endregion
 
@@ -37,6 +37,8 @@ public class HumanPlayerController : DamagebleObject
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+
         if (IsOwner)
         {
             FollowCamera cam = Camera.main.GetComponent<FollowCamera>();
