@@ -17,6 +17,7 @@ public class FollowCamera : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!_playerTrans) return;         
         if (_isRotated)
         {
             Vector3 newPos = _playerTrans.TransformPoint(_startPosition);

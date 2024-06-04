@@ -5,9 +5,14 @@ using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-public class GlobalPlayersData : NetworkBehaviour
+/// <summary>
+/// Представляет из себя хранилище для локальных данных игрока. 
+/// В идеале сюда должны подтягиваться данные с сервера при подключении.
+/// </summary>
+public class LocalPlayerData : NetworkBehaviour
 {
-    private string _playerName; public string PlayerName { get { return _playerName; } }
+    private string _playerName = ""; public string PlayerName { get { return _playerName; } }
+    private int _maxHp = 100; public int MaxHp { get { return _maxHp; } }
 
     public void SetPlayerName(string name, Action onError = null)
     {

@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3605374336
+  GlobalObjectIdHash: 2397801799
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -198,10 +198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5bb55c400afef4f84d0423b2d2b9b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp:
-    m_InternalValue: 100
-  _currentHp:
-    m_InternalValue: 100
   _minFallHeightToGetDamage: 3
   _fallDamageMultyplier: 2
   _moveSpeed: 10
@@ -259,6 +255,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _checkDistance: 0.9
+  _checkRadius: 0.5
   _lowestPointTrans: {fileID: 1288472973}
 --- !u!114 &2476638477817133448
 MonoBehaviour:

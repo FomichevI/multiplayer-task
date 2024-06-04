@@ -21,10 +21,7 @@ public class FloatingHud : NetworkBehaviour
 
     public void UpdateName(string name)
     {
-        //if (IsOwner)
-        //{
-            _nameTmp.text = name;
-        //}
+        _nameTmp.text = name;
     }
 
     public void UpdateHpBar(int currentHp, int maxHp)

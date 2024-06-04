@@ -25,12 +25,7 @@ public class HumanPlayerController : DamagebleObject
     private OnGroundCheker _onGroundCheker;
     private float _lastVerInput; //Необходимо для определения направления во время движения в воздухе
 
-
-    private NetworkVariable<FixedString32Bytes> _name =
-        new NetworkVariable<FixedString32Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-
-
-    //*********************** УДАЛИТЬ!
+    // !!! Изменить зависимость !!! Костыль !!!
     [SerializeField] private Transform _cameraTarget;
 
 
@@ -43,25 +38,23 @@ public class HumanPlayerController : DamagebleObject
 
     public override void OnNetworkSpawn()
     {
-        _name.OnValueChanged += (FixedString32Bytes prevValue, FixedString32Bytes newValue) 
-            => { _playerHud.UpdateName(newValue.ToString()); };
         base.OnNetworkSpawn();
+        InitProperties();
+        InitPlayerHud();
+    }
 
+    private void InitProperties()
+    {
         if (IsOwner)
         {
             FollowCamera cam = Camera.main.GetComponent<FollowCamera>();
             cam.transform.position = transform.position;
             cam.SetTarget(_cameraTarget);
-            _name.Value = GameManager.Instance.PlayerData.PlayerName;
+            LocalPlayerData data = GameManager.Instance.PlayerData;
+            _name.Value = data.PlayerName;
+            _maxHp.Value = data.MaxHp;
+            _currentHp.Value = data.MaxHp;
         }
-        InitPlayerHud();
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        base.OnNetworkDespawn();
-        _name.OnValueChanged -= (FixedString32Bytes prevValue, FixedString32Bytes newValue)
-            => { _playerHud.UpdateName(newValue.ToString()); };
     }
 
     private void InitPlayerHud()
@@ -71,21 +64,21 @@ public class HumanPlayerController : DamagebleObject
         else
             _playerHud.UpdateName("Player " + OwnerClientId);
 
-
-        // Здесь необходимо получить значения из БД и потом устанавливаем их на HUD и в самом классе
-        _playerHud.UpdateHpBar(100, 100);
+        _playerHud.UpdateHpBar(_currentHp.Value, _maxHp.Value);
     }
 
     private void OnEnable()
     {
         _onGroundCheker.OnFallEnd.AddListener(GetFallDamage);
         OnHpChangedEvent.AddListener(_playerHud.UpdateHpBar);
+        OnNameChangedEvent.AddListener(_playerHud.UpdateName);
     }
 
     private void OnDisable()
     {
         _onGroundCheker.OnFallEnd.RemoveListener(GetFallDamage);
         OnHpChangedEvent.RemoveListener(_playerHud.UpdateHpBar);
+        OnNameChangedEvent.RemoveListener(_playerHud.UpdateName);
     }
 
     public void Move(float horInput, float verInput)
@@ -114,7 +107,6 @@ public class HumanPlayerController : DamagebleObject
         if (_onGroundCheker.OnTheGround && _lastVerInput >= 0)
         {
             _rigidbody.AddForce(Vector3.up * 10000 * _jumpForce);
-            //_humanAnimator.Jump();
         }
     }
 
