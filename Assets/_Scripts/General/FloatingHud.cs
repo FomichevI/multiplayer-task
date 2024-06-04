@@ -12,8 +12,6 @@ public class FloatingHud : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI _hpTmp;
     [SerializeField] private Image _hpBarFilling;
 
-    [SerializeField] private NetworkVariable<FixedString32Bytes> _name = 
-        new NetworkVariable<FixedString32Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
 
     private void LateUpdate()
@@ -21,13 +19,12 @@ public class FloatingHud : NetworkBehaviour
         transform.LookAt(transform.position + Camera.main.transform.forward);
     }
 
-    [ClientRpc]
-    public void UpdateNameClientRpc(string name)
+    public void UpdateName(string name)
     {
-        //_name.Value = name;
-        //_nameTmp.text = _name.Value.ToString();
-
-        _nameTmp.text = name;
+        //if (IsOwner)
+        //{
+            _nameTmp.text = name;
+        //}
     }
 
     public void UpdateHpBar(int currentHp, int maxHp)

@@ -7,7 +7,9 @@ using UnityEngine;
 
 public class GlobalPlayersData : NetworkBehaviour
 {
-    public void SetPlayerName(int playerID,string name, Action onError = null)
+    private string _playerName; public string PlayerName { get { return _playerName; } }
+
+    public void SetPlayerName(string name, Action onError = null)
     {
         if (name.Length * sizeof(Char) > 32)
         {
@@ -16,10 +18,10 @@ public class GlobalPlayersData : NetworkBehaviour
         }
         else
         {
-            //if (IsStringCorrect(name))            
-            //    _playerName.Value = name;            
-            //else
-            //    onError?.Invoke();
+            if (IsStringCorrect(name))
+                _playerName = name;
+            else
+                onError?.Invoke();
         }
     }
 

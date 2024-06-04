@@ -17,11 +17,11 @@ public class MenuUiManager : MonoBehaviour
 
     private void TryChangePlayerName(string name)
     {
-        //GameManager.Instance.PlayerData.SetPlayerName(name, () =>
-        //{
-        //    _playerInputField.Select();
-        //    _playerInputField.text = "";
-        //});
+        GameManager.Instance.PlayerData.SetPlayerName(name, () =>
+        {
+            _playerInputField.Select();
+            _playerInputField.text = "";
+        });
     }
 
     public void OnHostButtonClick()

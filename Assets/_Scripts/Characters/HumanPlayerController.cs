@@ -1,3 +1,5 @@
+using Unity.Collections;
+using Unity.Netcode;
 using UnityEngine;
 using Zenject.Asteroids;
 
@@ -24,6 +26,10 @@ public class HumanPlayerController : DamagebleObject
     private float _lastVerInput; //Необходимо для определения направления во время движения в воздухе
 
 
+    private NetworkVariable<FixedString32Bytes> _name =
+        new NetworkVariable<FixedString32Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+
     //*********************** УДАЛИТЬ!
     [SerializeField] private Transform _cameraTarget;
 
@@ -37,6 +43,8 @@ public class HumanPlayerController : DamagebleObject
 
     public override void OnNetworkSpawn()
     {
+        _name.OnValueChanged += (FixedString32Bytes prevValue, FixedString32Bytes newValue) 
+            => { _playerHud.UpdateName(newValue.ToString()); };
         base.OnNetworkSpawn();
 
         if (IsOwner)
@@ -44,17 +52,24 @@ public class HumanPlayerController : DamagebleObject
             FollowCamera cam = Camera.main.GetComponent<FollowCamera>();
             cam.transform.position = transform.position;
             cam.SetTarget(_cameraTarget);
+            _name.Value = GameManager.Instance.PlayerData.PlayerName;
         }
         InitPlayerHud();
     }
 
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        _name.OnValueChanged -= (FixedString32Bytes prevValue, FixedString32Bytes newValue)
+            => { _playerHud.UpdateName(newValue.ToString()); };
+    }
+
     private void InitPlayerHud()
     {
-        //string name = GameManager.Instance.PlayerData.PlayerName;
-        //if (name != null && name != "")
-        //    _playerHud.UpdateNameClientRpc(name);
-        //else
-            _playerHud.UpdateNameClientRpc("Player " + OwnerClientId);
+        if (_name.Value != "")
+            _playerHud.UpdateName(_name.Value.ToString());
+        else
+            _playerHud.UpdateName("Player " + OwnerClientId);
 
 
         // Здесь необходимо получить значения из БД и потом устанавливаем их на HUD и в самом классе
