@@ -16,9 +16,11 @@ public class HumanPlayerController : DamagebleObject
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _jumpForce = 1.5f;
+    [SerializeField] private float _jumpCollDown = 0.5f;
     //[SerializeField] private float _fireAngle = -5;
     //[SerializeField] private float _fireColldown = 1;
     [SerializeField] private float _jumpMoveMultiplier = 0.3f;
+    private float _lastJumpTime;
     #endregion
 
     [SerializeField] private FloatingHud _playerHud;
@@ -59,6 +61,8 @@ public class HumanPlayerController : DamagebleObject
             _currentHp.Value = data.MaxHp;
             // спавним в рандомной позиции
             SpawnOnRandomPoint();
+
+            _lastJumpTime = Time.time - _jumpCollDown;
         }
     }
 
@@ -111,9 +115,11 @@ public class HumanPlayerController : DamagebleObject
     public void Jump()
     {
         if (!_isAlive) return;
+        if (Time.time - _lastJumpTime <= _jumpCollDown) return;
         if (_onGroundCheker.OnTheGround && _lastVerInput >= 0)
         {
             _rigidbody.AddForce(Vector3.up * 10000 * _jumpForce);
+            _lastJumpTime = Time.time;
         }
     }
 

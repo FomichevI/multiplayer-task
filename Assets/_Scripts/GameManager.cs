@@ -22,8 +22,9 @@ public class GameManager : NetworkBehaviour
 
     private void Start()
     {
-        //LoadMenuScene();
-
+#if !UNITY_EDITOR
+        LoadMenuScene();
+#endif
     }
 
     public void LoadMenuScene()
