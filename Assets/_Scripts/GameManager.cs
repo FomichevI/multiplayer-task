@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance;
 
@@ -22,7 +22,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        LoadMenuScene();
+        //LoadMenuScene();
+
     }
 
     public void LoadMenuScene()
@@ -35,6 +36,27 @@ public class GameManager : MonoBehaviour
         _connectType = type;
         _sceneLoader.LoadScene(_gameConfig.GameplaySceneName);
     }
+
+    public void DisconnectPlayer()
+    {
+        if (IsHost)
+        {
+            DisconnectPlayerClientRpc();
+        }
+        else
+        {
+            NetworkManager.Singleton.Shutdown();
+            LoadMenuScene();
+        }
+    }
+
+    [ClientRpc]
+    private void DisconnectPlayerClientRpc()
+    {
+        NetworkManager.Singleton.Shutdown();
+        LoadMenuScene();
+    }
+
 }
 
 public enum ConnectionType { Client, Server, Host}

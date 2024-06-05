@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class FollowCamera : MonoBehaviour
 {
@@ -13,6 +14,21 @@ public class FollowCamera : MonoBehaviour
         _playerTrans = targetTrans;
         Vector3 inversedPos = _playerTrans.InverseTransformPoint(transform.position);
         _startPosition = new Vector3(inversedPos.x + _fixStartPosition.x, inversedPos.y + _fixStartPosition.y, inversedPos.z + _fixStartPosition.z) ;
+    }
+
+    public void SetPositionImmediatly()
+    {
+        if (_isRotated)
+        {
+            Vector3 newPos = _playerTrans.TransformPoint(_startPosition);
+            transform.position = newPos;
+            transform.LookAt(_playerTrans);
+        }
+        else
+        {
+            Vector3 newPos = _playerTrans.TransformPoint(_startPosition);
+            transform.position = newPos;
+        }
     }
 
     private void FixedUpdate()

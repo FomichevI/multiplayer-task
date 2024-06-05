@@ -38,11 +38,6 @@ public class HumanAnimator : MonoBehaviour
     {
         _animator.SetFloat("Speed", verInput);
     }
-    //public void Jump()
-    //{
-    //    _animator.SetBool("Jump", true);
-    //    _animator.SetBool("OnTheGround", false);
-    //}
 
     public void SetAnimationJump(bool ontheGround)
     {

@@ -95,6 +95,9 @@ GameObject:
   - component: {fileID: 8003587308438504351}
   - component: {fileID: 8003587308438504348}
   - component: {fileID: 8003587308438504338}
+  - component: {fileID: 2879251021151394501}
+  - component: {fileID: 237735666865563885}
+  - component: {fileID: -3637398212286212496}
   m_Layer: 0
   m_Name: MedicineChest
   m_TagString: Untagged
@@ -130,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1964090476
+  GlobalObjectIdHash: 3575497152
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -151,6 +154,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8a3a4bc0333db140870bdc317d956e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnChastUsed:
+    m_PersistentCalls:
+      m_Calls: []
   _healingHp: 20
 --- !u!65 &8003587308438504338
 BoxCollider:
@@ -165,6 +171,72 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2862141, y: 0.80622953, z: 0.6260569}
   m_Center: {x: -0.013650417, y: -0.0016997755, z: -0.00000011920929}
+--- !u!95 &2879251021151394501
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8003587308438504350}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e39c5c410846a4642a5f6e2f9ff4ae1b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &237735666865563885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8003587308438504350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 2879251021151394501}
+--- !u!114 &-3637398212286212496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8003587308438504350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 0
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 0
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1 &8003587309665819407
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,15 +9,21 @@ using static UnityEngine.Rendering.DebugUI;
 public class MenuUiManager : MonoBehaviour
 {
     [SerializeField] private TMP_InputField _playerInputField;
+    private GameManager _gameManager;
 
     private void Awake()
     {
+        _gameManager = GameManager.Instance;
         _playerInputField.onEndEdit.AddListener(TryChangePlayerName);
+        if (_gameManager.PlayerData.PlayerName != null && _gameManager.PlayerData.PlayerName != "")
+        {
+            _playerInputField.text = _gameManager.PlayerData.PlayerName;
+        }
     }
 
     private void TryChangePlayerName(string name)
     {
-        GameManager.Instance.PlayerData.SetPlayerName(name, () =>
+        _gameManager.PlayerData.SetPlayerName(name, () =>
         {
             _playerInputField.Select();
             _playerInputField.text = "";
@@ -26,12 +32,12 @@ public class MenuUiManager : MonoBehaviour
 
     public void OnHostButtonClick()
     {
-        GameManager.Instance.LoadGameplayScene(ConnectionType.Host);
+        _gameManager.LoadGameplayScene(ConnectionType.Host);
     }
 
     public void OnClientButtonClick()
     {
-        GameManager.Instance.LoadGameplayScene(ConnectionType.Client);
+        _gameManager.LoadGameplayScene(ConnectionType.Client);
     }
 
 }

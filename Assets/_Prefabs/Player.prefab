@@ -220,8 +220,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _horizontalAxis: Horizontal
   _verticalAxis: Vertical
-  _fireButton: {fileID: 0}
-  _jumpButton: {fileID: 0}
 --- !u!114 &1023709724187675075
 MonoBehaviour:
   m_ObjectHideFlags: 0

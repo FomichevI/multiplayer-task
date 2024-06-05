@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Zenject;
 
 [RequireComponent(typeof(HumanPlayerController))]
 
@@ -10,18 +11,20 @@ public class HumanPlayerInput : NetworkBehaviour
 {
     [SerializeField] private string _horizontalAxis = "Horizontal";
     [SerializeField] private string _verticalAxis = "Vertical";
-    [SerializeField] private Button _fireButton;
-    [SerializeField] private Button _jumpButton;
     private float _inputHorizontal;
     private float _inputVertical;
     private HumanPlayerController _playerController;
 
+
     private void Awake()
     {
         _playerController = GetComponent<HumanPlayerController>();
-        //AddEventToButton(_fireButton, Fire, EventTriggerType.PointerClick);
+    }
 
-        //AddEventToButton(_jumpButton, Jump, EventTriggerType.PointerClick);
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        MobilePlayerInputUi.Instance.AddEventToJumpButton(Jump);
     }
 
     void Update()
@@ -32,8 +35,8 @@ public class HumanPlayerInput : NetworkBehaviour
         _inputVertical = SimpleInput.GetAxis(_verticalAxis);
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-            Fire();
+        //if (Input.GetKeyDown(KeyCode.LeftShift))
+        //    Fire();
     }
 
     private void Jump()
@@ -41,10 +44,10 @@ public class HumanPlayerInput : NetworkBehaviour
         _playerController.Jump(); 
     }
 
-    private void Fire()
-    {
-        _playerController.Fire(); 
-    }
+    //private void Fire()
+    //{
+    //    _playerController.Fire(); 
+    //}
 
     private void FixedUpdate()
     {
@@ -52,12 +55,4 @@ public class HumanPlayerInput : NetworkBehaviour
         _playerController.Move(_inputHorizontal, _inputVertical);
     }
 
-    private void AddEventToButton(Button button, Action action, EventTriggerType triggerType) //метод для будущего улучшения скрипта
-    {
-        EventTrigger trigger = button.GetComponent<EventTrigger>();
-        EventTrigger.Entry entry = new EventTrigger.Entry();
-        entry.eventID = triggerType;
-        entry.callback.AddListener((data) => action());
-        trigger.triggers.Add(entry);
-    }
 }

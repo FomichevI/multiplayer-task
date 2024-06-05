@@ -20,7 +20,7 @@ public abstract class DamagebleObject : NetworkBehaviour
     [SerializeField] private float _fallDamageMultyplier = 1.5f; // мультипликатор урона от падения увеличивает урон от падения за каждую единицу высоты 
     // сверх минимальной высоты, при падении с которой объект получает урон
 
-    private bool _isAlive = true;
+    protected bool _isAlive = true;
 
     public override void OnNetworkSpawn()
     {
@@ -83,5 +83,11 @@ public abstract class DamagebleObject : NetworkBehaviour
     protected virtual void Death()
     {
 
+    }
+
+    protected virtual void ResetHp()
+    {
+        _currentHp.Value = _maxHp.Value;
+        _isAlive = true;
     }
 }

@@ -1,7 +1,9 @@
+using System.Collections;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject.Asteroids;
+using static SimpleInput;
 
 [RequireComponent(typeof(HumanPlayerInput))]
 [RequireComponent(typeof(HumanAnimator))]
@@ -27,7 +29,7 @@ public class HumanPlayerController : DamagebleObject
 
     // !!! »зменить зависимость !!!  остыль !!!
     [SerializeField] private Transform _cameraTarget;
-
+    private FollowCamera _playerCamera;
 
     private void Awake()
     {
@@ -47,13 +49,16 @@ public class HumanPlayerController : DamagebleObject
     {
         if (IsOwner)
         {
-            FollowCamera cam = Camera.main.GetComponent<FollowCamera>();
-            cam.transform.position = transform.position;
-            cam.SetTarget(_cameraTarget);
+            _playerCamera = Camera.main.GetComponent<FollowCamera>(); // !!!  остыль !!! Ќужно добавить зависимость через zenject, но, как и со всем, что св€зано
+            // с сетевым кодом, это сделать можно только через новые костыли
+            _playerCamera.transform.position = transform.position;
+            _playerCamera.SetTarget(_cameraTarget);
             LocalPlayerData data = GameManager.Instance.PlayerData;
             _name.Value = data.PlayerName;
             _maxHp.Value = data.MaxHp;
             _currentHp.Value = data.MaxHp;
+            // спавним в рандомной позиции
+            SpawnOnRandomPoint();
         }
     }
 
@@ -83,6 +88,7 @@ public class HumanPlayerController : DamagebleObject
 
     public void Move(float horInput, float verInput)
     {
+        if (!_isAlive) return;
         // ¬ полете уменьшаем скорость персонажа. ≈сли персонаж прыгнул с места, то его скорость перемещени€ уменьшаетс€ еще сильнее
         float speedMulti = _onGroundCheker.OnTheGround ? 1 : _jumpMoveMultiplier * (_lastVerInput <= 0.2f ? 0.5f : 1f);
 
@@ -104,19 +110,41 @@ public class HumanPlayerController : DamagebleObject
 
     public void Jump()
     {
+        if (!_isAlive) return;
         if (_onGroundCheker.OnTheGround && _lastVerInput >= 0)
         {
             _rigidbody.AddForce(Vector3.up * 10000 * _jumpForce);
         }
     }
 
-    public void Fire()
-    {
+    //public void Fire()
+    //{
 
-    }
+    //}
 
     protected override void Death()
     {
+        _humanAnimator.SetAnimationJump(true); // ¬ будущем заменить на анимацию смерти
+        _humanAnimator.Move(0);
+        RespawnPlayer();
+    }
 
+    private void RespawnPlayer()
+    {
+        StartCoroutine(RespawnCo());
+        IEnumerator RespawnCo()
+        {
+            yield return new WaitForSeconds(3);
+            SpawnOnRandomPoint();
+            ResetHp();
+        }
+    }
+
+    private void SpawnOnRandomPoint()
+    {
+        Transform newTrans = PlayerSpawner.Instance.GetRandomSpawnPoint();
+        transform.position = newTrans.position;
+        transform.rotation = newTrans.rotation;
+        _playerCamera.SetPositionImmediatly();
     }
 }
